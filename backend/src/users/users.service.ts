@@ -1,4 +1,4 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -31,6 +31,14 @@ export class UsersService {
     });
 
     return await this.usersRepository.save(user);
+  }
+
+  async findByEmail(email: string): Promise<User | undefined> {
+    const userFind = await this.usersRepository.findOne({
+      where: { email },
+    });
+
+    return userFind || undefined;
   }
 
   findAll() {
